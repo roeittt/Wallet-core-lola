@@ -1,0 +1,56 @@
+{
+  "name": "@okxweb3/coin-stellar",
+  "version": "2.4.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "run-s clean build:main",
+    "build:main": "tsc -p tsconfig.json",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:coverage:watch": "jest --coverage --watch",
+    "test:ci": "jest --ci --coverage --coverageReporters=lcov --coverageReporters=text",
+    "test:debug": "jest --detectOpenHandles --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/okx/js-wallet-sdk"
+  },
+  "keywords": [
+    "Stellar",
+    "PI",
+    "SDK",
+    "Web3",
+    "wallet",
+    "private key",
+    "address generation",
+    "transaction signing",
+    "trustline",
+    "asset transfer",
+    "blockchain"
+  ],
+  "author": "okx",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.25.8",
+    "@babel/preset-env": "^7.25.8",
+    "babel-jest": "^27.5.1"
+  },
+  "dependencies": {
+    "@babel/preset-flow": "^7.25.7",
+    "@okxweb3/coin-base": "2.0.3",
+    "@okxweb3/crypto-lib": "2.0.5",
+    "@stellar/js-xdr": "3.1.2",
+    "base32.js": "0.1.0",
+    "bignumber.js": "9.1.2",
+    "sha.js": "2.4.12",
+    "sodium-native": "4.1.1",
+    "tweetnacl": "1.0.3"
+  },
+  "description": "@okxweb3/coin-stellar is a Stellar SDK for building Web3 wallets and applications. It supports Stellar and PI blockchains, enabling private key management, address generation, transaction signing, trustline creation, and asset transfers"
+}

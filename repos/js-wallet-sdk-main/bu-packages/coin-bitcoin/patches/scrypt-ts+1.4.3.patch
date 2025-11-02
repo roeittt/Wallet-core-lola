@@ -1,0 +1,14 @@
+diff --git a/node_modules/scrypt-ts/dist/client/apis/contract/sync-hashed-props.js b/node_modules/scrypt-ts/dist/client/apis/contract/sync-hashed-props.js
+index 38da3ed..58c0259 100644
+--- a/node_modules/scrypt-ts/dist/client/apis/contract/sync-hashed-props.js
++++ b/node_modules/scrypt-ts/dist/client/apis/contract/sync-hashed-props.js
+@@ -6,7 +6,8 @@ const hashed_map_1 = require("../../../smart-contract/builtins/hashed-map");
+ const types_1 = require("../../../smart-contract/builtins/types");
+ ;
+ // monkey patch BigInt.toJSON as recommended by https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#use_within_json
+-BigInt.prototype.toJSON = function () { return this.toString(); };
++// remove this monkey patch because it is not compatible with SES
++// BigInt.prototype.toJSON = function () { return this.toString(); };
+ class SyncHashedPropsAction {
+     constructor() {
+         this.method = 'POST';

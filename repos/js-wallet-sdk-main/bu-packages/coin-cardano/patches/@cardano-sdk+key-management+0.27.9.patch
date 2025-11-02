@@ -1,0 +1,119 @@
+diff --git a/node_modules/@cardano-sdk/key-management/dist/cjs/cip8/cip30signData.js b/node_modules/@cardano-sdk/key-management/dist/cjs/cip8/cip30signData.js
+index 6a037db..e0f0406 100644
+--- a/node_modules/@cardano-sdk/key-management/dist/cjs/cip8/cip30signData.js
++++ b/node_modules/@cardano-sdk/key-management/dist/cjs/cip8/cip30signData.js
+@@ -25,7 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.cip30signData = exports.createCoseKey = exports.getAddressBytes = exports.Cip30DataSignError = exports.Cip30DataSignErrorCode = void 0;
+ const Crypto = __importStar(require("@cardano-sdk/crypto"));
+-const cardano_message_signing_nodejs_1 = require("@emurgo/cardano-message-signing-nodejs");
++// const cardano_message_signing_nodejs_1 = require("@emurgo/cardano-message-signing-nodejs");
+ const core_1 = require("@cardano-sdk/core");
+ const util_1 = require("@cardano-sdk/util");
+ const util_2 = require("./util");
+@@ -74,43 +74,47 @@ const getDerivationPath = async (signWith, knownAddresses, dRepKeyHash) => {
+     }
+     return { index: knownAddress.index, role: knownAddress.type };
+ };
+-const createSigStructureHeaders = (addressBytes) => {
+-    const protectedHeaders = cardano_message_signing_nodejs_1.HeaderMap.new();
+-    protectedHeaders.set_key_id(addressBytes);
+-    protectedHeaders.set_header(util_2.CoseLabel.address, cardano_message_signing_nodejs_1.CBORValue.new_bytes(addressBytes));
+-    protectedHeaders.set_algorithm_id(cardano_message_signing_nodejs_1.Label.from_algorithm_id(cardano_message_signing_nodejs_1.AlgorithmId.EdDSA));
+-    return protectedHeaders;
+-};
+-const signSigStructure = (keyAgent, derivationPath, sigStructure) => {
+-    try {
+-        return keyAgent.signBlob(derivationPath, core_1.util.bytesToHex(sigStructure.to_bytes()));
+-    }
+-    catch (error) {
+-        throw new Cip30DataSignError(Cip30DataSignErrorCode.UserDeclined, 'Failed to sign', error);
+-    }
+-};
+-const createCoseKey = (addressBytes, publicKey) => {
+-    const coseKey = cardano_message_signing_nodejs_1.COSEKey.new(cardano_message_signing_nodejs_1.Label.from_key_type(cardano_message_signing_nodejs_1.KeyType.OKP));
+-    coseKey.set_key_id(addressBytes);
+-    coseKey.set_algorithm_id(cardano_message_signing_nodejs_1.Label.from_algorithm_id(cardano_message_signing_nodejs_1.AlgorithmId.EdDSA));
+-    coseKey.set_header(util_2.CoseLabel.crv, cardano_message_signing_nodejs_1.CBORValue.from_label(cardano_message_signing_nodejs_1.Label.from_curve_type(cardano_message_signing_nodejs_1.CurveType.Ed25519)));
+-    coseKey.set_header(util_2.CoseLabel.x, cardano_message_signing_nodejs_1.CBORValue.new_bytes(Buffer.from(publicKey, 'hex')));
+-    return coseKey;
+-};
+-exports.createCoseKey = createCoseKey;
++// const createSigStructureHeaders = (addressBytes) => {
++//     const protectedHeaders = cardano_message_signing_nodejs_1.HeaderMap.new();
++//     protectedHeaders.set_key_id(addressBytes);
++//     protectedHeaders.set_header(util_2.CoseLabel.address, cardano_message_signing_nodejs_1.CBORValue.new_bytes(addressBytes));
++//     protectedHeaders.set_algorithm_id(cardano_message_signing_nodejs_1.Label.from_algorithm_id(cardano_message_signing_nodejs_1.AlgorithmId.EdDSA));
++//     return protectedHeaders;
++// };
++// const signSigStructure = (keyAgent, derivationPath, sigStructure) => {
++//     try {
++//         return keyAgent.signBlob(derivationPath, core_1.util.bytesToHex(sigStructure.to_bytes()));
++//     }
++//     catch (error) {
++//         throw new Cip30DataSignError(Cip30DataSignErrorCode.UserDeclined, 'Failed to sign', error);
++//     }
++// };
++// const createCoseKey = (addressBytes, publicKey) => {
++//     const coseKey = cardano_message_signing_nodejs_1.COSEKey.new(cardano_message_signing_nodejs_1.Label.from_key_type(cardano_message_signing_nodejs_1.KeyType.OKP));
++//     coseKey.set_key_id(addressBytes);
++//     coseKey.set_algorithm_id(cardano_message_signing_nodejs_1.Label.from_algorithm_id(cardano_message_signing_nodejs_1.AlgorithmId.EdDSA));
++//     coseKey.set_header(util_2.CoseLabel.crv, cardano_message_signing_nodejs_1.CBORValue.from_label(cardano_message_signing_nodejs_1.Label.from_curve_type(cardano_message_signing_nodejs_1.CurveType.Ed25519)));
++//     coseKey.set_header(util_2.CoseLabel.x, cardano_message_signing_nodejs_1.CBORValue.new_bytes(Buffer.from(publicKey, 'hex')));
++//     return coseKey;
++// };
++// exports.createCoseKey = createCoseKey;
+ const cip30signData = async (keyAgent, { knownAddresses, signWith, payload }) => {
+-    const dRepKeyHash = (await Crypto.Ed25519PublicKey.fromHex(await keyAgent.derivePublicKey(util_3.DREP_KEY_DERIVATION_PATH)).hash()).hex();
+-    const addressBytes = (0, exports.getAddressBytes)(signWith);
+-    const derivationPath = await getDerivationPath(signWith, knownAddresses, dRepKeyHash);
+-    const builder = cardano_message_signing_nodejs_1.COSESign1Builder.new(cardano_message_signing_nodejs_1.Headers.new(cardano_message_signing_nodejs_1.ProtectedHeaderMap.new(createSigStructureHeaders(addressBytes)), cardano_message_signing_nodejs_1.HeaderMap.new()), Buffer.from(payload, 'hex'), false);
+-    const sigStructure = builder.make_data_to_sign();
+-    const { signature, publicKey } = await signSigStructure(keyAgent, derivationPath, sigStructure);
+-    const coseSign1 = builder.build(Buffer.from(signature, 'hex'));
+-    const coseKey = (0, exports.createCoseKey)(addressBytes, publicKey);
++    // const dRepKeyHash = (await Crypto.Ed25519PublicKey.fromHex(await keyAgent.derivePublicKey(util_3.DREP_KEY_DERIVATION_PATH)).hash()).hex();
++    // const addressBytes = (0, exports.getAddressBytes)(signWith);
++    // const derivationPath = await getDerivationPath(signWith, knownAddresses, dRepKeyHash);
++    // const builder = cardano_message_signing_nodejs_1.COSESign1Builder.new(cardano_message_signing_nodejs_1.Headers.new(cardano_message_signing_nodejs_1.ProtectedHeaderMap.new(createSigStructureHeaders(addressBytes)), cardano_message_signing_nodejs_1.HeaderMap.new()), Buffer.from(payload, 'hex'), false);
++    // const sigStructure = builder.make_data_to_sign();
++    // const { signature, publicKey } = await signSigStructure(keyAgent, derivationPath, sigStructure);
++    // const coseSign1 = builder.build(Buffer.from(signature, 'hex'));
++    // const coseKey = (0, exports.createCoseKey)(addressBytes, publicKey);
++    // return {
++    //     key: core_1.util.bytesToHex(coseKey.to_bytes()),
++    //     signature: core_1.util.bytesToHex(coseSign1.to_bytes())
++    // };
+     return {
+-        key: core_1.util.bytesToHex(coseKey.to_bytes()),
+-        signature: core_1.util.bytesToHex(coseSign1.to_bytes())
+-    };
++        key: Buffer.alloc(32),
++        signature: Buffer.alloc(64)
++    }
+ };
+ exports.cip30signData = cip30signData;
+ //# sourceMappingURL=cip30signData.js.map
+\ No newline at end of file
+diff --git a/node_modules/@cardano-sdk/key-management/dist/cjs/cip8/util.js b/node_modules/@cardano-sdk/key-management/dist/cjs/cip8/util.js
+index f8f042b..0bd242d 100644
+--- a/node_modules/@cardano-sdk/key-management/dist/cjs/cip8/util.js
++++ b/node_modules/@cardano-sdk/key-management/dist/cjs/cip8/util.js
+@@ -1,10 +1,10 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.CoseLabel = void 0;
+-const cardano_message_signing_nodejs_1 = require("@emurgo/cardano-message-signing-nodejs");
+-exports.CoseLabel = {
+-    address: cardano_message_signing_nodejs_1.Label.new_text('address'),
+-    crv: cardano_message_signing_nodejs_1.Label.new_int(cardano_message_signing_nodejs_1.Int.new_i32(-1)),
+-    x: cardano_message_signing_nodejs_1.Label.new_int(cardano_message_signing_nodejs_1.Int.new_i32(-2))
+-};
++// const cardano_message_signing_nodejs_1 = require("@emurgo/cardano-message-signing-nodejs");
++// exports.CoseLabel = {
++//     address: cardano_message_signing_nodejs_1.Label.new_text('address'),
++//     crv: cardano_message_signing_nodejs_1.Label.new_int(cardano_message_signing_nodejs_1.Int.new_i32(-1)),
++//     x: cardano_message_signing_nodejs_1.Label.new_int(cardano_message_signing_nodejs_1.Int.new_i32(-2))
++// };
+ //# sourceMappingURL=util.js.map
+\ No newline at end of file

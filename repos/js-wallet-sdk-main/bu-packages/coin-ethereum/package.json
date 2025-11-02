@@ -1,0 +1,50 @@
+{
+  "name": "@okxweb3/coin-ethereum",
+  "version": "2.4.0",
+  "description": "An Ethereum SDK for building Web3 wallets and applications.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "run-s clean build:main",
+    "build:main": "tsc -p tsconfig.json",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
+    "prepublishOnly": "node ../../scripts/dep-version-check.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:coverage:watch": "jest --coverage --watch",
+    "test:ci": "jest --ci --coverage --coverageReporters=lcov --coverageReporters=text",
+    "test:debug": "jest --detectOpenHandles --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/okx/js-wallet-sdk"
+  },
+  "keywords": [
+    "ethereum",
+    "eth",
+    "wallet",
+    "web3",
+    "crypto",
+    "blockchain",
+    "sdk",
+    "transaction",
+    "signing",
+    "address",
+    "private-key"
+  ],
+  "author": "okx",
+  "license": "MIT OR MPL 2.0",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "@metamask/eth-sig-util": "8.2.0",
+    "@okxweb3/coin-base": "2.0.3",
+    "@okxweb3/crypto-lib": "2.0.5",
+    "eth-sig-util": "3.0.1",
+    "ethereum-cryptography": "3.1.0",
+    "superstruct": "1.0.4"
+  }
+}

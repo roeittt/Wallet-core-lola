@@ -1,0 +1,22 @@
+# IDE & OS specific
+.DS_Store
+.idea
+
+# Validator
+.agave
+test-ledger/
+
+# Logs
+logs
+*.log
+
+# Dependencies
+node_modules/
+
+# VIM swap files
+*.sw*
+
+# Build artifacts
+declarations/
+doc/
+lib/

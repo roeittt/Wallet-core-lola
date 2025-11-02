@@ -1,0 +1,45 @@
+{
+  "name": "@okxweb3/coin-nostrassets",
+  "version": "2.4.0",
+  "description": "A NostrAssets SDK for building Web3 wallets and applications.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "run-s clean build:main",
+    "build:main": "tsc -p tsconfig.json",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
+    "prepublishOnly": "node ../../scripts/dep-version-check.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:coverage:watch": "jest --coverage --watch",
+    "test:ci": "jest --ci --coverage --coverageReporters=lcov --coverageReporters=text",
+    "test:debug": "jest --detectOpenHandles --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/okx/js-wallet-sdk"
+  },
+  "keywords": [
+    "nostrassets",
+    "wallet",
+    "web3",
+    "crypto",
+    "blockchain",
+    "sdk",
+    "transaction",
+    "signing",
+    "address",
+    "private-key"
+  ],
+  "author": "okx",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "@okxweb3/crypto-lib": "2.0.5",
+    "@okxweb3/coin-base": "2.0.3"
+  }
+}

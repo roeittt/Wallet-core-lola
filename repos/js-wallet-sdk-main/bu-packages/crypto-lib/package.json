@@ -1,0 +1,70 @@
+{
+  "name": "@okxweb3/crypto-lib",
+  "version": "2.0.5",
+  "description": "A base package for @okxweb3/coin-*",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "run-s clean build:main",
+    "build:main": "tsc -p tsconfig.json",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
+    "prepublishOnly": "node ../../scripts/dep-version-check.js",
+    "postinstall": "patch-package",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:coverage:watch": "jest --coverage --watch",
+    "test:ci": "jest --ci --coverage --coverageReporters=lcov --coverageReporters=text",
+    "test:debug": "jest --detectOpenHandles --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/okx/js-wallet-sdk"
+  },
+  "keywords": [
+    "wallet",
+    "web3",
+    "crypto",
+    "blockchain",
+    "sdk",
+    "transaction",
+    "signing",
+    "address",
+    "private-key"
+  ],
+  "author": "okx",
+  "license": "MIT OR MPL 2.0",
+  "files": [
+    "dist",
+    "patches"
+  ],
+  "devDependencies": {
+    "@types/bn.js": "^4.11.6",
+    "@types/create-hash": "1.2.2",
+    "@types/create-hmac": "1.1.0",
+    "@types/randombytes": "2.0.0",
+    "patch-package": "^8.0.0"
+  },
+  "dependencies": {
+    "@metamask/key-tree": "10.1.1",
+    "@noble/ed25519": "1.7.3",
+    "@noble/hashes": "1.7.2",
+    "@noble/secp256k1": "1.7.1",
+    "@scure/base": "1.2.6",
+    "@scure/bip32": "1.7.0",
+    "asmcrypto.js": "2.3.2",
+    "bignumber.js": "9.1.2",
+    "bn.js": "4.12.0",
+    "brorand": "1.1.0",
+    "hash.js": "1.1.7",
+    "hmac-drbg": "1.0.1",
+    "inherits": "2.0.4",
+    "long": "5.2.4",
+    "minimalistic-assert": "1.0.1",
+    "minimalistic-crypto-utils": "1.0.1",
+    "protobufjs": "7.4.0",
+    "randombytes": "2.1.0",
+    "typeforce": "1.18.0",
+    "wif": "2.0.6"
+  }
+}

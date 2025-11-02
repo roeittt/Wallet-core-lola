@@ -1,0 +1,67 @@
+{
+  "name": "okxweb3",
+  "version": "1.0.0",
+  "description": "okx js sdk for web3",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx lerna run build --stream --ignore=@ok/tee-wallet-sdk",
+    "clean": "npx lerna run clean --stream",
+    "rmd": "rm -rf node_modules bu-packages/*/node_modules package-lock.json",
+    "test": "npx lerna run test --stream --ignore=@ok/metax-signlayer --ignore=@ok/threshold-lib --ignore=@ok/tee-wallet-sdk",
+    "test:watch": "npx lerna run test --stream --watch --ignore=@ok/metax-signlayer --ignore=@ok/threshold-lib --ignore=@ok/tee-wallet-sdk",
+    "test:coverage": "npx lerna run test:coverage --stream --ignore=@ok/metax-signlayer --ignore=@ok/threshold-lib --ignore=@ok/tee-wallet-sdk",
+    "test:coverage:watch": "npx lerna run test:coverage --stream --watch --ignore=@ok/metax-signlayer --ignore=@ok/threshold-lib --ignore=@ok/tee-wallet-sdk",
+    "test:ci": "npx lerna run test:ci --stream --ignore=@ok/metax-signlayer --ignore=@ok/threshold-lib --ignore=@ok/tee-wallet-sdk",
+    "test:changed": "npx lerna run test --stream --since HEAD~1",
+    "test:affected": "npx lerna run test --stream --since origin/main",
+    "test:parallel": "npx lerna run test --parallel --ignore=@ok/metax-signlayer --ignore=@ok/threshold-lib --ignore=@ok/tee-wallet-sdk",
+    "test:debug": "npx lerna run test:debug --stream --ignore=@ok/metax-signlayer --ignore=@ok/threshold-lib --ignore=@ok/tee-wallet-sdk",
+    "deps:list": "npx lerna list",
+    "deps:graph": "npx lerna list --graph",
+    "deps:json": "npx lerna list --json",
+    "deps:visual": "node scripts/dependency-visualizer.js",
+    "deps:analyze": "node scripts/dependency-graph.js"
+  },
+  "author": "",
+  "private": true,
+  "workspaces": [
+    "bu-*/crypto-lib",
+    "bu-*/coin-base",
+    "bu-*/coin-ethereum",
+    "bu-*/coin-kaia",
+    "bu-*/coin-tron",
+    "bu-*/coin-zkspace",
+    "bu-*/coin-aptos",
+    "bu-*/coin-bitcoin",
+    "bu-*/coin-cardano",
+    "bu-*/coin-cosmos",
+    "bu-*/coin-eos",
+    "bu-*/coin-kaspa",
+    "bu-*/coin-near",
+    "bu-*/coin-nostrassets",
+    "bu-*/coin-solana",
+    "bu-*/coin-stacks",
+    "bu-*/coin-starknet",
+    "bu-*/coin-sui",
+    "bu-*/coin-xrp"
+  ],
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^12.20.52",
+    "jest": "^29.7.0",
+    "lerna": "^8.2.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "2.6.2",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
+  },
+  "overrides": {
+    "npm": "10.9.3"
+  }
+}

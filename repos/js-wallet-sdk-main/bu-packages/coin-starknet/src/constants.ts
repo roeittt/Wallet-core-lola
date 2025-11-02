@@ -1,0 +1,5 @@
+export const ETH = "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
+export const STRK = "0x04718f5a0Fc34cC1AF16A1cdee98fFB20C31f5cD61D6Ab07201858f4287c938D"
+export const ETHBridge = "0x073314940630fd6dcda0d772d4c972c4e0a9946bef9dabf4ef84eda8ef542b82";
+export const ProxyAccountClassHash = "0x3530cc4759d78042f1b543bf797f5f3d647cde0388c33734cf91b7f7b9314a9";
+export const accountClassHash = "0x309c042d3729173c7f2f91a34f04d8c509c1b292d334679ef1aabf8da0899cc";

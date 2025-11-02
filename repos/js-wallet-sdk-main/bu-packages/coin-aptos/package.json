@@ -1,0 +1,40 @@
+{
+  "name": "@okxweb3/coin-aptos",
+  "version": "2.4.0",
+  "description": "A aptos SDK for building Web3 wallets and applications.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "run-s clean build:main",
+    "build:main": "tsc -p tsconfig.json",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
+    "prepublishOnly": "node ../../scripts/dep-version-check.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:coverage:watch": "jest --coverage --watch",
+    "test:ci": "jest --ci --coverage --coverageReporters=lcov --coverageReporters=text",
+    "test:debug": "jest --detectOpenHandles --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/okx/js-wallet-sdk"
+  },
+  "keywords": [],
+  "author": "okx",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "@aptos-labs/script-composer-pack": "0.0.9",
+    "@noble/curves": "1.8.0",
+    "@noble/hashes": "1.7.1",
+    "@scure/bip32": "1.6.2",
+    "@scure/bip39": "1.5.4",
+    "tweetnacl": "1.0.3",
+    "@okxweb3/crypto-lib": "2.0.5",
+    "@okxweb3/coin-base": "2.0.3"
+  }
+}
