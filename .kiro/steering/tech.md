@@ -1,101 +1,93 @@
 # Technology Stack
 
-## Build Systems & Package Management
+## Build Systems
 
-- **Webpack**: Primary build system for Rabby browser extension
-- **Lerna**: Monorepo management for OKX Web3 SDK
-- **CMake**: Build system for Trust Wallet Core (C++)
-- **Rollup**: Module bundler for Ethers.js
-- **Yarn**: Package manager for Rabby (v1.22.22)
-- **npm**: Package manager for other projects
-- **TypeScript**: Primary language across all JavaScript/TypeScript projects
+### Rabby Wallet (Browser Extension)
+- **Build Tool**: Webpack 5 with custom configuration
+- **Language**: TypeScript 5.3.3
+- **Framework**: React 17.0.2
+- **Styling**: Styled Components + TailwindCSS 2.2.2
+- **State Management**: Redux + Rematch
+- **Package Manager**: Yarn 1.22.22
+- **Node Version**: >=22
 
-## Core Technologies
+### OKX Web3 SDK (Multi-chain)
+- **Build Tool**: Lerna monorepo with TypeScript
+- **Language**: TypeScript 4.9.5
+- **Testing**: Jest 29.7.0
+- **Package Manager**: npm
+- **Architecture**: Modular packages per blockchain
 
-### Frontend & UI
-- **React 17**: UI framework for Rabby extension
-- **Styled Components**: CSS-in-JS styling
-- **Antd 4.15**: UI component library
-- **TailwindCSS**: Utility-first CSS framework
+### Ethers.js
+- **Build Tool**: TypeScript + Rollup
+- **Language**: TypeScript 5.0.4
+- **Testing**: Mocha 10.7.3
+- **Node Version**: >=14.0.0
+- **Output**: ESM + CommonJS
 
-### Blockchain & Crypto
-- **Ethers.js**: Ethereum interaction library
-- **Viem**: TypeScript Ethereum library
-- **Web3**: Blockchain interaction utilities
-- **Hardware Wallet SDKs**: Ledger, Trezor, Keystone integrations
-
-### Development Tools
-- **ESLint**: Code linting with TypeScript support
-- **Prettier**: Code formatting
-- **Jest**: Testing framework
-- **Patch Package**: Runtime patching of dependencies
+### Trust Wallet Core
+- **Build Tool**: CMake 3.18+
+- **Language**: C++ with TypeScript/Swift/Kotlin bindings
+- **Compiler**: Clang (required)
+- **Architecture**: Cross-platform native library
 
 ## Common Build Commands
 
-### Rabby Wallet
+### Rabby Development
 ```bash
-# Development build with file watching
-yarn build:dev
-
-# Production build
-yarn build:pro
-
-# Debug build
-yarn build:debug
-
-# Clean build artifacts
-yarn clean
-
-# Run tests
-yarn test
-
-# Lint and fix code
-yarn lint:fix
+yarn install
+yarn build:dev     # Development build with file watching
+yarn build:pro     # Production build
+yarn test          # Run tests
+yarn lint:fix      # Fix linting issues
 ```
 
-### OKX Web3 SDK
+### OKX SDK Development
 ```bash
-# Build all packages
-npm run build
-
-# Run tests across all packages
-npm run test
-
-# Clean all dependencies
-npm run rmd
-
-# Test with coverage
-npm run test:coverage
+npm install
+npm run build      # Build all packages
+npm run test       # Run all tests
+npm run clean      # Clean build artifacts
 ```
 
-### Ethers.js
+### Ethers.js Development
 ```bash
-# Build ESM modules
-npm run build
-
-# Build all formats
-npm run build-all
-
-# Run tests
-npm run test
-
-# Build distribution files
-npm run build-dist
+npm install
+npm run build      # Build TypeScript
+npm run test       # Run test suite
+npm run build-dist # Build distribution files
 ```
 
 ### Trust Wallet Core
 ```bash
-# Bootstrap dependencies
-./bootstrap.sh
-
-# Build with CMake
-mkdir build && cd build
-cmake ..
-make
+cmake -S . -B build
+cmake --build build
 ```
 
-## Node.js Requirements
+## Key Dependencies
 
-- **Rabby**: Node.js >=22
-- **Ethers.js**: Node.js >=14
-- **General**: Node.js 14+ recommended for all projects
+### Cryptographic Libraries
+- `@noble/curves`, `@noble/hashes` (Ethers.js)
+- `@scure/bip39` (BIP39 implementation)
+- `hdkey` (HD wallet derivation)
+
+### Blockchain SDKs
+- `ethers` 5.8.0 (Ethereum interactions)
+- `@solana/web3.js` (Solana blockchain)
+- `viem` 2.23.15 (Modern Ethereum library)
+
+### Browser Extension APIs
+- `webextension-polyfill` (Cross-browser compatibility)
+- `@metamask/*` packages (Wallet standards)
+
+### Hardware Wallet Support
+- `@ledgerhq/*` (Ledger integration)
+- `@trezor/connect-webextension` (Trezor support)
+- `@keystonehq/*` (Keystone hardware wallet)
+
+## Testing Strategy
+
+- **Unit Tests**: Jest for all TypeScript projects
+- **Integration Tests**: Mocha for Ethers.js
+- **Browser Testing**: Custom test runners for extension
+- **Coverage**: c8 for coverage reporting

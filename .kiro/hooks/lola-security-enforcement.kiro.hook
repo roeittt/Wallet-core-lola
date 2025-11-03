@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": "Lola Wallet Security Enforcement",
+  "description": "Comprehensive security hook that prevents secret misuse outside keyring, blocks unauthorized signing logic, prevents UX repos from handling crypto operations, enforces token listing implementation, and ensures proper keyring usage in chain adapters",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.js",
+      "**/*.jsx",
+      "src/background/chains/*.ts"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the changed files for Lola Wallet security violations:\n\n1. **Secret Exfiltration Check**: If any file contains \"privateKey\" or \"mnemonic\" but the file path doesn't include \"keyring\", respond with \"SECURITY_FATAL_SECRET_EXFILTRATION: Key/mnemonic outside keyring\"\n\n2. **Unauthorized Signing Check**: If any content contains \"ethers.Wallet(\" respond with \"CONFLICT_CRYPTO_SOURCE: Signing must use wallet-core only\"\n\n3. **UX Repo Crypto Influence Check**: If referencing files from \"repos/rabby/**\", \"repos/phantom/**\", or \"repos/kraken/**\" and the context contains \"sign\" or \"derive\", respond with \"CONFLICT_CRYPTO_SOURCE: UX repo cannot handle crypto\"\n\n4. **Token Listing Enforcement**: For new files matching \"src/background/chains/*.ts\", if content doesn't contain \"listTokens(\", respond with \"TOKENS_LISTING_REQUIRED: Must implement listTokens()\"\n\n5. **Keyring Usage Check**: For files matching \"src/background/chains/*.ts\", if content doesn't contain \"signTx\", respond with \"CHAIN_ADAPTER_WARNING: Adapter missing signTx() usage\"\n\nProvide specific violations found with file paths and line numbers where possible. If no violations are found, confirm the files comply with Lola Wallet security requirements."
+  }
+}
