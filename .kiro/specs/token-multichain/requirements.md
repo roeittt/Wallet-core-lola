@@ -1,47 +1,103 @@
-# Lola Wallet – Token & Multi-chain Spec
+# Implementation Requirements — Lola Wallet Web App
 
-## Supported Token Standards
+## App Type
+- Browser Extension (Manifest V3)
+- React + Vite UI
+- Background Service Worker for wallet logic
+- All application code MUST be under `/src` directory
 
-- EVM: ERC-20 (Phase-2 add ERC-721/1155)
-- Solana: SPL tokens via token registry
-- BNB: BEP-20 (ERC-20 format)
-- Polygon/AVAX/FTM/Arbitrum/Optimism: ERC-20 format
-- Cosmos/IBC: Tick/Tick2 formats
-- XRP: native XRP asset
-- Dogecoin/Litecoin: native coins only
+## Core Functionalities
+1️⃣ Create/import wallet
+2️⃣ Derive addresses for multiple chains
+3️⃣ Show balances (native + tokens)
+4️⃣ Send transactions (native + supported tokens)
+5️⃣ Receive funds (QR code + copy address)
+6️⃣ Integrated Buy Crypto screen (on-ramps)
 
-## Token Discovery
+## Supported Chains (Phase-1)
+- Ethereum + ERC-20 tokens
+- Solana + SPL tokens
+- Bitcoin (native)
+- Polygon, Binance Smart Chain, Avalanche C, Fantom, Arbitrum, Optimism (via ERC-20 compatibility)
+- XRP (native, basic transfer only)
+- Cosmos ATOM + IBC tokens (balance + send)
+- Dogecoin + Litecoin (native send/receive only)
 
-- EVM: ERC-20 via:
-  - standard balanceOf(address)
-  - auto-load via token lists JSON + async detection
-- SPL:
-  - fetch from Solana token accounts for address
-- Cosmos:
-  - gRPC / LCD balance queries
+## Token Requirements
+- Auto-detect tokens for all EVM/L2 networks (token lists + balanceOf)
+- Auto-detect SPL tokens via Solana token accounts
+- Cosmos IBC: list balances per denom
+- Show:
+  - symbol, name, decimals
+  - balance formatted correctly
+  - fiat estimate (optional/future)
+  - token icon (or identicon fallback)
 
-## Display Rules
+## Architecture Layout (MUST FOLLOW)
+src/
+ ├─ background/
+ │    ├─ keyring.ts            # signing + derivation
+ │    ├─ bus.ts                # UI <-> background bridge
+ │    └─ chains/
+ │         ├─ evm.ts
+ │         ├─ sol.ts
+ │         └─ btc.ts
+ ├─ ui/
+ │    ├─ main.tsx
+ │    ├─ App.tsx
+ │    └─ screens/
+ │         ├─ Home.tsx
+ │         ├─ Send.tsx
+ │         ├─ Receive.tsx
+ │         ├─ Buy.tsx
+ │
+ ├─ shared/
+ │    ├─ types.ts
+ │    └─ format.ts
 
-- Always show base asset + detected tokens
-- Sort by fiat value desc
-- Token icons:
-  - official URI if present
-  - fallback: deterministic identicon
+## Screen Requirements
+- **Home**
+  - chain selector
+  - wallet value
+  - token list (native asset first)
+- **Send**
+  - select asset + amount + address
+  - fee estimate + confirm
+  - show tx hash after broadcast
+- **Receive**
+  - active address QR
+  - tap-to-copy
+- **Buy**
+  - Integrate at least MoonPay widget
+  - Additional provider optional (Ramp/Transak/Banxa)
+  - Auto-fill active address + chain/asset
 
-## Minimal Wallet Operation per token
+## Signing + Key Handling
+- Must use Trust Wallet Core WASM for:
+  - BIP39 mnemonic generation/import
+  - Deriving addresses
+  - Signing transactions
+- Background only — UI cannot access mnemonics/privkeys
+- Encrypted seed storage (WebCrypto AES-GCM locally)
 
-- Address display
-- Balance fetch
-- Transfer with proper decimals
-- Fee estimation warning if too high
-- Validate receiver address format per chain
+## Networking
+- EVM/L2 via ethers.js JSON-RPC provider defined in ENV
+- Solana via @solana/web3.js + chosen RPC
+- Bitcoin via Esplora endpoint ENV
+- Cosmos, XRP via public RPC/REST (testnets allowed)
 
-## Success Condition
+## ENV Variables Required
+- `VITE_ETH_RPC` (Sepolia for tests)
+- `VITE_SOL_RPC` (Devnet for tests)
+- `VITE_BTC_API` (Blockstream testnet)
+- Optional RPCs for other chains
 
-Wallet must show and transfer:
-- ETH, USDT, USDC, LINK, UNI, MATIC, WBTC, DAI, SHIB
-- SOL + SPL USDC/SRM/RAY
-- BNB + BUSD/CAKE
-- AVAX + any ERC-20
-- ATOM + at least 1 IBC token
-- DOGE + LTC (native only)
+## Technical Deliverables
+✅ Browser-extension build in `/dist`  
+✅ manifest.json included in `/dist`  
+✅ Code compiles with no TypeScript errors  
+✅ Background <-> UI messaging implemented
+
+## Completion Success Token
+Output after all features working:
+LOLA_WEB_MVP_READY

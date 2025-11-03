@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Lola Wallet",
+  "version": "1.0.0",
+  "description": "Multi-chain cryptocurrency wallet",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*.ethereum.org/*",
+    "https://*.solana.com/*",
+    "https://*.polygon.technology/*",
+    "https://*.binance.org/*",
+    "https://*.arbitrum.io/*",
+    "https://*.optimism.io/*",
+    "https://*.avax.network/*",
+    "https://*.fantom.foundation/*"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "ui/popup.html",
+    "default_title": "Lola Wallet"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-script/injected.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["ui/*", "assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}

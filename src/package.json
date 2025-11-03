@@ -1,0 +1,40 @@
+{
+  "name": "lola-wallet",
+  "version": "1.0.0",
+  "description": "Multi-chain browser wallet extension",
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "build:prod": "vite build --mode production",
+    "build:test": "./scripts/build-and-test.sh",
+    "type-check": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@noble/curves": "^1.2.0",
+    "@noble/ed25519": "^3.0.0",
+    "@noble/hashes": "^1.3.2",
+    "@scure/bip32": "^2.0.1",
+    "@scure/bip39": "^1.2.1",
+    "@solana/web3.js": "^1.87.6",
+    "bs58": "^6.0.0",
+    "ethers": "^6.8.1",
+    "qrcode": "^1.5.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tweetnacl": "^1.0.3",
+    "viem": "^2.23.15",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.251",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "vite-plugin-web-extension": "^4.1.1"
+  }
+}
