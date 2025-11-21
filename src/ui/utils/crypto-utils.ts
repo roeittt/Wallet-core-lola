@@ -2,6 +2,8 @@ import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from '@scure/b
 import { wordlist } from '@scure/bip39/wordlists/english';
 import { HDKey } from '@scure/bip32';
 import { keccak_256 } from '@noble/hashes/sha3';
+import { hmac } from '@noble/hashes/hmac';
+import { sha512 } from '@noble/hashes/sha512';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import bs58 from 'bs58';
 import nacl from 'tweetnacl';
@@ -12,6 +14,8 @@ import nacl from 'tweetnacl';
  */
 
 export class CryptoUtils {
+  private static readonly HARDENED_OFFSET = 0x80000000;
+
   /**
    * Generate a new BIP39 mnemonic phrase
    */
@@ -63,18 +67,10 @@ export class CryptoUtils {
     privateKey: string;
   } {
     const seed = mnemonicToSeedSync(mnemonic);
-    const hdkey = HDKey.fromMasterSeed(seed);
-    const derived = hdkey.derive(derivationPath);
+    const { key: derivedSeed } = this.deriveEd25519Path(derivationPath, seed);
     
-    if (!derived.privateKey) {
-      throw new Error('Failed to derive private key');
-    }
-
-    // For Solana, we need to use the first 32 bytes as the seed for nacl
-    const seedBytes = derived.privateKey.slice(0, 32);
-    
-    // Generate keypair using nacl (same as Solana web3.js)
-    const keypair = nacl.sign.keyPair.fromSeed(seedBytes);
+    // Generate keypair using nacl (same as Solana web3.js/Phantom)
+    const keypair = nacl.sign.keyPair.fromSeed(derivedSeed);
     
     // Solana addresses are base58 encoded public keys
     const address = bs58.encode(keypair.publicKey);
@@ -86,6 +82,51 @@ export class CryptoUtils {
       address: address,
       privateKey: privateKey
     };
+  }
+
+  /**
+   * Derive an ed25519 child key using SLIP-0010 (needed for Solana)
+   */
+  private static deriveEd25519Path(path: string, seed: Uint8Array): { key: Uint8Array; chainCode: Uint8Array } {
+    if (!path.startsWith('m/')) {
+      throw new Error('Invalid derivation path');
+    }
+
+    const segments = path
+      .split('/')
+      .slice(1)
+      .map((segment) => {
+        const hardened = segment.endsWith("'");
+        const indexStr = hardened ? segment.slice(0, -1) : segment;
+        const index = parseInt(indexStr, 10);
+        if (Number.isNaN(index)) {
+          throw new Error(`Invalid path segment: ${segment}`);
+        }
+        return index + (hardened ? this.HARDENED_OFFSET : 0);
+      });
+
+    const encoder = new TextEncoder();
+    let digest = hmac(sha512, encoder.encode('ed25519 seed'), seed);
+    let key = digest.slice(0, 32);
+    let chainCode = digest.slice(32);
+
+    for (const segment of segments) {
+      const data = new Uint8Array(1 + key.length + 4);
+      data.set([0], 0);
+      data.set(key, 1);
+      data.set([
+        (segment >>> 24) & 0xff,
+        (segment >>> 16) & 0xff,
+        (segment >>> 8) & 0xff,
+        segment & 0xff
+      ], 1 + key.length);
+
+      digest = hmac(sha512, chainCode, data);
+      key = digest.slice(0, 32);
+      chainCode = digest.slice(32);
+    }
+
+    return { key, chainCode };
   }
 
   /**

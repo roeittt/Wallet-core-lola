@@ -1,9 +1,21 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
+import fs from 'fs';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      // Copy the extension manifest to dist root so Chrome can load the build
+      name: 'copy-manifest-json',
+      writeBundle() {
+        const src = resolve(__dirname, 'manifest.json');
+        const dest = resolve(__dirname, '../dist/manifest.json');
+        fs.copyFileSync(src, dest);
+      }
+    }
+  ],
   build: {
     outDir: '../dist',
     emptyOutDir: true,
