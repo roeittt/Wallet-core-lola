@@ -5,7 +5,6 @@ import { DERIVATION_PATHS, ERRORS } from '@shared/constants';
 import { HDKey } from '@scure/bip32';
 import { mnemonicToSeedSync, generateMnemonic, validateMnemonic } from '@scure/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english';
-import * as ed25519 from '@noble/ed25519';
 import { keccak_256 } from '@noble/hashes/sha3';
 import { sha256 } from '@noble/hashes/sha256';
 import { hmac } from '@noble/hashes/hmac';
@@ -229,23 +228,24 @@ export class TrustWalletCoreKeyring {
     }
 
     try {
-      // Get private key for the derivation path
-      const hdKey = HDKey.fromMasterSeed(this.seed);
-      const derivedKey = hdKey.derive(derivationPath);
-      
-      if (!derivedKey.privateKey) {
-        throw new Error('Failed to derive private key');
-      }
-      
-      // Handle Solana transactions
+      // Handle Solana transactions (uses SLIP-0010 + nacl)
       if (chainId === 'solana') {
-        return await this.signSolanaTransaction(derivedKey.privateKey, unsignedTx);
+        const { key: derivedSeed } = this.deriveEd25519Path(derivationPath, this.seed);
+        const keypair = nacl.sign.keyPair.fromSeed(derivedSeed);
+        return await this.signSolanaTransaction(keypair.secretKey, unsignedTx);
       }
       
-      // Handle EVM transactions (would use ethers or viem)
+      // Handle EVM transactions (uses BIP32)
       if (chainId === 'ethereum' || chainId === 'polygon' || chainId === 'bsc' || 
           chainId === 'arbitrum' || chainId === 'optimism' || chainId === 'avalanche' || 
           chainId === 'fantom') {
+        const hdKey = HDKey.fromMasterSeed(this.seed);
+        const derivedKey = hdKey.derive(derivationPath);
+        
+        if (!derivedKey.privateKey) {
+          throw new Error('Failed to derive private key');
+        }
+        
         return await this.signEVMTransaction(derivedKey.privateKey, unsignedTx);
       }
       
@@ -258,13 +258,13 @@ export class TrustWalletCoreKeyring {
   /**
    * Sign Solana transaction
    */
-  private async signSolanaTransaction(privateKey: Uint8Array, unsignedTx: any): Promise<string> {
+  private async signSolanaTransaction(secretKey: Uint8Array, unsignedTx: any): Promise<string> {
     try {
       // Parse transaction data
       const txData = Buffer.from(unsignedTx.params.data, 'base64');
       
       // Sign with nacl (same as Solana web3.js)
-      const signature = nacl.sign.detached(txData, privateKey);
+      const signature = nacl.sign.detached(txData, secretKey);
       
       // Return signed transaction
       return Buffer.from(signature).toString('base64');
